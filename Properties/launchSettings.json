@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "InfiniteWorldLibrary": {
+      "commandName": "Project"
+    },
+    "Profil 1": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "$(tMLPath)",
+      "workingDirectory": "$(tMLSteamPath)"
+    }
+  }
+}

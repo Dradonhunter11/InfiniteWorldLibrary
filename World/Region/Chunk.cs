@@ -153,14 +153,9 @@ namespace InfiniteWorldLibrary.World.Region
                 return;
             }
 
-            if (!ChunkGeneratorV2.PendingChunkList.Contains(chunkID))
+            if (!ChunkGeneratorV2.PendingChunkList.Contains(chunkID) && !ChunkGeneratorV2.generatedChunkList.Contains(chunkID))
             {
-                Task.Run(() =>
-                {
-                    LogManager.GetLogger("Generating").Info(chunkID);
-                    var generate = ChunkGeneratorV2.GenerateDefaultChunkGen(chunkID);
-                    generate.GenerateChunk();
-                });
+                ChunkGeneratorV2.PendingChunkList.Enqueue(chunkID);
             }
 
             var newData = new T[Chunk.ChunkWidth * Chunk.ChunkHeight];

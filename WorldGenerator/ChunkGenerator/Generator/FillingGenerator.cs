@@ -12,6 +12,29 @@ using Terraria;
 
 namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
 {
+    public class ClearEverything : GeneratePass
+    {
+        public ClearEverything(uint ChunkId) : base(ChunkId)
+        {
+        }
+
+        public override void Apply(long startingX)
+        {
+            for (int i = 0; i < Main.maxTilesX; i++)
+            {
+                for (int j = 0; j < Main.maxTilesY; j++)
+                {
+                    var tile = Main.tile[i, j];
+                    tile.WallType = 0;
+                    tile.LiquidAmount = 0;
+                    tile.TileType = 0;
+                    tile.HasTile = false;
+                    tile.HasActuator = false;
+                }
+            }
+        }
+    }
+
     public class SurfaceGenerator : GeneratePass
     {
         public SurfaceGenerator(uint ChunkId) : base(ChunkId)
@@ -38,10 +61,10 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                     totalDisplacement[j] += displacements[i][j];
                 }
             }
-
+            
             for (int x = 0; x < startingX + Chunk.ChunkWidth; x++)
             {
-                for (int y = 0; y < 800; y++)
+                for (int y = 0; y < 400; y++)
                 {
                     var tile = StaticInstance.WorldInstance[x, y];
                     tile.HasTile = false;
@@ -159,6 +182,24 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                     tile.TileColor = 7;
                     tile.LiquidType = 0;
                     tile.LiquidAmount = 0;
+                }
+            }
+        }
+    }
+
+    public class FixEverything : GeneratePass
+    {
+        public FixEverything(uint ChunkId) : base(ChunkId)
+        {
+        }
+
+        public override void Apply(long startingX)
+        {
+            for (int i = (int)startingX; i < startingX + ChunkMap.ChunkWidth; i++)
+            {
+                for (int j = 0; j < Main.maxTilesY + 200; j++)
+                {
+                    WorldGen.TileFrame(i, j);
                 }
             }
         }

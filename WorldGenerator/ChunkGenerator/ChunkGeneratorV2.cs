@@ -20,6 +20,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
     public static class ChunkGeneratorV2
     {
         public static ConcurrentQueue<uint> PendingChunkList = new ConcurrentQueue<uint>();
+        internal static ConcurrentBag<uint> generatedChunkList = new ConcurrentBag<uint>();
 
         private static Task _watcher;
         private static CancellationTokenSource source = new CancellationTokenSource();
@@ -41,6 +42,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
                                 LogManager.GetLogger("Generating").Info(chunkId);
                                 var generate = GenerateDefaultChunkGen(chunkId);
                                 generate.GenerateChunk();
+                                generatedChunkList.Add(chunkId);
                             }
                         });
                     }
@@ -52,10 +54,14 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
         internal static ChunkGen GenerateDefaultChunkGen(uint chunkId)
         {
             var chunkGen = new ChunkGen(chunkId);
+            chunkGen.AddPass("ClearEverything", new ClearEverything(chunkId));
             chunkGen.AddPass("Surface", new SurfaceGenerator(chunkId));
             chunkGen.AddPass("Underground", new UndergroundGenerator(chunkId));
             chunkGen.AddPass("Hell", new HellGenerator(chunkId));
             chunkGen.AddPass("Deep hell", new DeepHellGenerator(chunkId));
+            chunkGen.AddPass("TileFrame", new FixEverything(chunkId));
+            chunkGen.AddPass("PerlinDirtPatch", new DirtPerlinPatchGenerator(chunkId));
+            chunkGen.AddPass("PerlinCave", new BasicPerlinCaveWorldGenPass(chunkId));
             return chunkGen;
         }
     }

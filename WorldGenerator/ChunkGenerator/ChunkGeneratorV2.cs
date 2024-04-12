@@ -62,6 +62,10 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
             chunkGen.AddPass("TileFrame", new FixEverything(chunkId));
             chunkGen.AddPass("PerlinDirtPatch", new DirtPerlinPatchGenerator(chunkId));
             chunkGen.AddPass("PerlinCave", new BasicPerlinCaveWorldGenPass(chunkId));
+            chunkGen.AddPass("Copper", new CopperOreGenerator(chunkId));
+            //chunkGen.AddPass("Tin", new TinOreGenerator(chunkId));
+            chunkGen.AddPass("Iron", new IronOreGenerator(chunkId));
+            //chunkGen.AddPass("Lead", new LeadOreGenerator(chunkId));
             return chunkGen;
         }
     }

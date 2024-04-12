@@ -20,13 +20,13 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             if (caveNoise == null)
             {
                 caveNoise = new FastNoise(Main.ActiveWorldFileData.Seed - 10);
-                caveNoise.SetFrequency(0.023f);
-                caveNoise.SetFractalOctaves(3);
+                caveNoise.SetFrequency(0.05f);
+                caveNoise.SetFractalOctaves(5);
                 caveNoise.SetFractalGain(0.5f);
                 caveNoise.SetFractalLacunarity(2f);
                 caveNoise.SetFractalWeightedStrength(0.0f);
                 caveNoise.SetCellularDistanceFunction(FastNoise.CellularDistanceFunction.EuclideanSq);
-                caveNoise.SetCellularReturnType(FastNoise.CellularReturnType.Distance2Add);
+                caveNoise.SetCellularReturnType(FastNoise.CellularReturnType.CellValue);
                 caveNoise.SetCellularJitter(1f);
                 // caveNoise.SetFractalPingPongStrength(0.9f);
 
@@ -57,13 +57,11 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                     {
                         var tile = Main.tile[startingPositionX + i, j];
                         tile.TileType = TileID.Dirt;
-                        tile.WallType = WallID.Dirt;
                     }
-                    else if (noiseValue >= 0.0000000000005f)
+                    else if (noiseValue >= 0.9f)
                     {
                         var tile = Main.tile[startingPositionX + i, j];
                         tile.TileType = TileID.Dirt;
-                        tile.WallType = WallID.Dirt;
                     }
                 }
             }
@@ -97,7 +95,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             int startingPositionY = 400;
             for (int i = 0; i < Chunk.ChunkWidth; i++)
             {
-                for (int j = 400; j < Main.maxTilesY - 200; j++)
+                for (int j = 400; j < Main.maxTilesY - 150; j++)
                 {
                     float noiseValue = (float)(caveNoise.GetNoise((startingPositionX + i), j * 1.6f));
                     if (noiseValue >= 0.0095f)

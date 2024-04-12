@@ -20,16 +20,14 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
 
         public override void Apply(long startingX)
         {
+            
             for (int i = 0; i < Main.maxTilesX; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
                 {
                     var tile = Main.tile[i, j];
-                    tile.WallType = 0;
-                    tile.LiquidAmount = 0;
-                    tile.TileType = 0;
+                    tile.ResetToType(0);
                     tile.HasTile = false;
-                    tile.HasActuator = false;
                 }
             }
         }
@@ -74,7 +72,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             }
 
             int i2 = 0;
-            for (int x = (int)startingX; x < startingX + Chunk.ChunkWidth; x++)
+            for (int x = (int)0; x < Chunk.ChunkWidth; x++)
             {
                 totalDisplacement[i2] = (int)(totalDisplacement[i2] / displacements.Length + 75);
                 Fill(startingX + i2, totalDisplacement[i2] + 175, 1, 200, 0);
@@ -129,12 +127,13 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             {
                 for (int j = 400; j < Main.maxTilesY - 200; j++)
                 {
-                    var tile = StaticInstance.WorldInstance[i, j];
-                    tile.HasTile = true;
+                    var tile = Main.tile[i, j];
                     tile.TileType = TileID.Stone;
+                    tile.HasTile = true;
                     tile.BlockType = BlockType.Solid;
                     tile.LiquidType = 0;
                     tile.LiquidAmount = 0;
+                    tile.ResetToType(1);
                 }
             }
         }
@@ -152,7 +151,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             {
                 for (int j = Main.maxTilesY - 200; j < Main.maxTilesY; j++)
                 {
-                    var tile = StaticInstance.WorldInstance[i, j];
+                    var tile = Main.tile[i, j];
                     tile.HasTile = true;
                     tile.TileType = TileID.Ash;
                     tile.BlockType = BlockType.Solid;
@@ -175,7 +174,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             {
                 for (int j = Main.maxTilesY; j < Main.maxTilesY + 200; j++)
                 {
-                    var tile = StaticInstance.WorldInstance[i, j];
+                    var tile = Main.tile[i, j];
                     tile.HasTile = true;
                     tile.TileType = TileID.LihzahrdBrick;
                     tile.BlockType = BlockType.Solid;

@@ -32,23 +32,29 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
             {
                 while (true)
                 {
-                    if (PendingChunkList.Count > 0)
+                    if (PendingChunkList.TryDequeue(out var chunkId) && !generatedChunkList.Contains(chunkId))
                     {
+                        
+                        generatedChunkList.Add(chunkId);
                         Task.Run(() =>
                         {
-                            uint chunkId;
-                            if (PendingChunkList.TryDequeue(out chunkId))
-                            {
-                                LogManager.GetLogger("Generating").Info(chunkId);
-                                var generate = GenerateDefaultChunkGen(chunkId);
-                                generate.GenerateChunk();
-                                generatedChunkList.Add(chunkId);
-                            }
+                            uint staticChunkId = chunkId;
+                            LogManager.GetLogger("Generating").Info(staticChunkId);
+                            var generate = GenerateDefaultChunkGen(staticChunkId);
+                            generate.GenerateChunk();
                         });
                     }
                 }
             }, token,TaskCreationOptions.LongRunning);
             _watcher.Start();
+        }
+
+        public static void ForceGenerate(uint chunkId)
+        {
+            uint staticChunkId = chunkId;
+            LogManager.GetLogger("Generating").Info(staticChunkId);
+            var generate = GenerateDefaultChunkGen(staticChunkId);
+            generate.GenerateChunk();
         }
 
         internal static ChunkGen GenerateDefaultChunkGen(uint chunkId)

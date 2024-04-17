@@ -20,10 +20,9 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
 
         public override void Apply(long startingX)
         {
-            
-            for (int i = 0; i < Main.maxTilesX; i++)
+            for (int i = (int)startingX; i < startingX + Chunk.ChunkWidth; i++)
             {
-                for (int j = 0; j < Main.maxTilesY; j++)
+                for (int j = 0; j < Chunk.ChunkHeight; j++)
                 {
                     var tile = Main.tile[i, j];
                     tile.ResetToType(0);
@@ -60,7 +59,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                 }
             }
             
-            for (int x = 0; x < startingX + Chunk.ChunkWidth; x++)
+            for (int x = (int)startingX; x < startingX + Chunk.ChunkWidth; x++)
             {
                 for (int y = 0; y < 400; y++)
                 {
@@ -70,13 +69,11 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                     tile.LiquidAmount = 0;
                 }
             }
-
-            int i2 = 0;
-            for (int x = (int)0; x < Chunk.ChunkWidth; x++)
+            Main.NewText("Generating surface...");
+            for (int x = 0; x < Chunk.ChunkWidth; x++)
             {
-                totalDisplacement[i2] = (int)(totalDisplacement[i2] / displacements.Length + 75);
-                Fill(startingX + i2, totalDisplacement[i2] + 175, 1, 200, 0);
-                i2++;
+                totalDisplacement[x] = (int)(totalDisplacement[x] / displacements.Length + 75);
+                Fill(startingX + x, totalDisplacement[x] + 175, 1, 200, 0);
             }
         }
 
@@ -88,7 +85,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             noise.SetFractalType(FastNoise.FractalType.Ridged);
 
             int[] displacements = new int[displacementCount];
-            int startPosition = startingPosition * Chunk.ChunkWidth;
+            int startPosition = startingPosition;
             for (int x = 0; x < displacementCount; x++)
             {
                 float noiseValue = noise.GetNoise(x + startPosition, x + startPosition);

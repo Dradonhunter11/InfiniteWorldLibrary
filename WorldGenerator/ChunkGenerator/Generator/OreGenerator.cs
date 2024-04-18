@@ -13,11 +13,11 @@ using Terraria.WorldBuilding;
 
 namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
 {
-    internal class CopperOreGenerator : GeneratePass
+    internal class CopperTinOreGenerator : GeneratePass
     {
         public FastNoise noise;
 
-        public CopperOreGenerator(uint ChunkId) : base(ChunkId)
+        public CopperTinOreGenerator(uint ChunkId) : base(ChunkId)
         {
             if (noise == null)
             {
@@ -53,107 +53,11 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
         }
     }
 
-    internal class TinOreGenerator : GeneratePass
+    internal class IronLeadOreGenerator : GeneratePass
     {
         public FastNoise noise;
 
-        public TinOreGenerator(uint ChunkId) : base(ChunkId)
-        {
-            if (noise == null)
-            {
-                noise = new FastNoise(Main.ActiveWorldFileData.Seed + 11);
-                noise.SetFrequency(0.05f);
-                noise.SetFractalOctaves(5);
-                noise.SetFractalGain(0.5f);
-                noise.SetFractalLacunarity(2f);
-                noise.SetFractalWeightedStrength(0.0f);
-                noise.SetCellularDistanceFunction(FastNoise.CellularDistanceFunction.EuclideanSq);
-                noise.SetCellularReturnType(FastNoise.CellularReturnType.CellValue);
-                noise.SetCellularJitter(1f);
-                // caveNoise.SetFractalPingPongStrength(0.9f);
-
-                noise.SetFractalType(FastNoise.FractalType.None);
-                noise.SetNoiseType(FastNoise.NoiseType.Cellular);
-            }
-        }
-
-        public override void Apply(long startingX)
-        {/*
-            int startingPositionX = (int)(startingX);
-            for (int i = 0; i < Chunk.ChunkWidth; i++)
-            {
-                for (int j = 200; j < Main.maxTilesY - 200; j++)
-                {
-                    float noiseValue = (float)(noise.GetNoise((startingPositionX + i), j * 1.6f));
-                    if (j > 200 && j < 400 && noiseValue >= 0.90)
-                    {
-                        var tile = Main.tile[startingPositionX + i, j];
-                        tile.TileType = TileID.Tin;
-                    }
-                    if (noiseValue >= 0.95 && j > 400 && j < 600)
-                    {
-                        var tile = Main.tile[startingPositionX + i, j];
-                        tile.TileType = TileID.Tin;
-                    }
-                }
-            }*/
-        }
-    }
-
-    internal class LeadOreGenerator : GeneratePass
-    {
-        public FastNoise noise;
-
-        public LeadOreGenerator(uint ChunkId) : base(ChunkId)
-        {
-            if (noise == null)
-            {
-                noise = new FastNoise(Main.ActiveWorldFileData.Seed + 12);
-                noise.SetNoiseType(FastNoise.NoiseType.Cellular);
-                noise.SetFrequency(0.015f);
-                noise.SetFractalOctaves(3);
-                noise.SetFractalGain(0.5f);
-                noise.SetFractalLacunarity(2f);
-                noise.SetFractalWeightedStrength(0.0f);
-                noise.SetCellularDistanceFunction(FastNoise.CellularDistanceFunction.EuclideanSq);
-                noise.SetCellularReturnType(FastNoise.CellularReturnType.Distance2Add);
-                noise.SetCellularJitter(1f);
-                // caveNoise.SetFractalPingPongStrength(0.9f);
-
-                noise.SetFractalType(FastNoise.FractalType.None);
-                
-            }
-        }
-
-        public override void Apply(long startingX)
-        {
-            /*
-            int startingPositionX = (int)(startingX);
-            for (int i = 0; i < Chunk.ChunkWidth; i++)
-            {
-                for (int j = 200; j < Main.maxTilesY - 200; j++)
-                {
-                    float noiseValue = (float)(noise.GetNoise((startingPositionX + i), j * 1.6f));
-                    if (j > 200 && j < 400 && noiseValue >= 0.90)
-                    {
-                        var tile = Main.tile[startingPositionX + i, j];
-                        tile.TileType = TileID.Lead;
-                    }
-                    if (noiseValue >= 0.95 && j > 400 && j < 600)
-                    {
-                        var tile = Main.tile[startingPositionX + i, j];
-                        tile.TileType = TileID.Lead;
-                    }
-                }
-            }*/
-        }
-    }
-
-    internal class IronOreGenerator : GeneratePass
-    {
-        public FastNoise noise;
-
-        public IronOreGenerator(uint ChunkId) : base(ChunkId)
+        public IronLeadOreGenerator(uint ChunkId) : base(ChunkId)
         {
             if (noise == null)
             {

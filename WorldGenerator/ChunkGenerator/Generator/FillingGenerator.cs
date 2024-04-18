@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InfiniteWorldLibrary.Utils;
 using InfiniteWorldLibrary.World;
 using log4net;
 using Terraria.ID;
@@ -159,10 +160,69 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
         }
     }
 
+    public class HellChasmGenerator : GeneratePass
+    {
+        public HellChasmGenerator(uint ChunkId) : base(ChunkId)
+        {
+        }
+
+        public override void Apply(long startingX)
+        {
+
+            float[] frequency = new float[] { 0.077f, 0.005f, 0.1f };
+            float[] limit = new float[] { 0.075f, 0.5f, 0.05f };
+            float[] lacunarity = new float[] { 0.100f, 0.5f, 0.1f };
+            int[][] displacements = new int[frequency.Length][];
+
+            int[] totalDisplacement = new int[Chunk.ChunkWidth];
+            for (int i = 0; i < displacements.Length; i++)
+            {
+                displacements[i] = GetPerlinDisplacements(256, frequency[i], lacunarity[i], 128,  limit[i], Main.ActiveWorldFileData.Seed, (int)startingX);
+            }
+
+            for (int i = 0; i < displacements.Length; i++)
+            {
+                for (int j = 0; j < Chunk.ChunkWidth; j++)
+                {
+                    totalDisplacement[j] += displacements[i][j];
+                }
+            }
+
+            Main.NewText("Generating Hell Chasm...");
+            for (int x = 0; x < Chunk.ChunkWidth; x++)
+            {
+                totalDisplacement[x] = (int)(totalDisplacement[x] / displacements.Length);
+                WorldGenUtils.Fill(startingX + x, totalDisplacement[x] + Main.maxTilesY - 180, 1, WorldGen.genRand.Next(74, 76), 0, 0, false);
+            }
+        }
+
+        public static int[] GetPerlinDisplacements(int displacementCount, float frequency, float lacunarity, int maxLimit, float multiplier, int seed, int startingPosition = 0)
+        {
+            FastNoise noise = new FastNoise(seed);
+            noise.SetNoiseType(FastNoise.NoiseType.Perlin);
+            noise.SetFrequency(frequency);
+            noise.SetFractalType(FastNoise.FractalType.Ridged);
+            noise.SetFractalLacunarity(lacunarity);
+
+            int[] displacements = new int[displacementCount];
+            int startPosition = startingPosition;
+            for (int x = 0; x < displacementCount; x++)
+            {
+                float noiseValue = noise.GetNoise(x + startPosition, x + startPosition);
+
+                displacements[x] = (int)Math.Floor(noiseValue * maxLimit * multiplier);
+            }
+
+
+            return displacements;
+        }
+    }
+
     public class DeepHellGenerator : GeneratePass
     {
         public DeepHellGenerator(uint ChunkId) : base(ChunkId)
         {
+
         }
 
         public override void Apply(long startingX)

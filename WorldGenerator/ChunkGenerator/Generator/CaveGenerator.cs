@@ -95,14 +95,14 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
             int startingPositionY = 400;
             for (int i = 0; i < Chunk.ChunkWidth; i++)
             {
-                for (int j = 400; j < Main.maxTilesY - 150; j++)
+                for (int j = 400; j < Main.maxTilesY - 100; j++)
                 {
                     float noiseValue = (float)(caveNoise.GetNoise((startingPositionX + i), j * 1.6f));
                     if (noiseValue >= 0.0095f)
                     {
                         var tile = Main.tile[startingPositionX + i, j];
                         tile.HasTile = false;
-                        if (tile.WallType == 0)
+                        if (tile.WallType == 0 && j > Main.maxTilesY - 200)
                         {
                             tile.WallType = WallID.Stone;
                         }

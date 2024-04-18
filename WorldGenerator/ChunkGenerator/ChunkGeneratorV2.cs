@@ -60,18 +60,22 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
         internal static ChunkGen GenerateDefaultChunkGen(uint chunkId)
         {
             var chunkGen = new ChunkGen(chunkId);
+            // Initial tile clearing
             chunkGen.AddPass("ClearEverything", new ClearEverything(chunkId));
+            // Main world component generation
             chunkGen.AddPass("Surface", new SurfaceGenerator(chunkId));
             chunkGen.AddPass("Underground", new UndergroundGenerator(chunkId));
             chunkGen.AddPass("Hell", new HellGenerator(chunkId));
             chunkGen.AddPass("Deep hell", new DeepHellGenerator(chunkId));
+            // Attempt at tile framing
             chunkGen.AddPass("TileFrame", new FixEverything(chunkId));
+            // Ore generation
+            chunkGen.AddPass("Copper", new CopperTinOreGenerator(chunkId));
+            chunkGen.AddPass("Iron", new IronLeadOreGenerator(chunkId));
+            // Cave generation
             chunkGen.AddPass("PerlinDirtPatch", new DirtPerlinPatchGenerator(chunkId));
             chunkGen.AddPass("PerlinCave", new BasicPerlinCaveWorldGenPass(chunkId));
-            chunkGen.AddPass("Copper", new CopperOreGenerator(chunkId));
-            //chunkGen.AddPass("Tin", new TinOreGenerator(chunkId));
-            chunkGen.AddPass("Iron", new IronOreGenerator(chunkId));
-            //chunkGen.AddPass("Lead", new LeadOreGenerator(chunkId));
+            chunkGen.AddPass("HellChasm", new HellChasmGenerator(chunkId));
             return chunkGen;
         }
     }

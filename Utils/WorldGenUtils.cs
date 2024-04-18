@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.WorldBuilding;
 using Terraria;
+using InfiniteWorldLibrary.World.Region;
 
 namespace InfiniteWorldLibrary.Utils
 {
@@ -14,6 +15,20 @@ namespace InfiniteWorldLibrary.Utils
     {
         internal static List<(Vector2D, int)> OreList = new List<(Vector2D, int)>();
 
+        public static void Fill(long x, int startingY, int width = 1, int depth = 1, ushort tileType = 0, ushort wallType = 0, bool hasTile = true)
+        {
+            for (int i = startingY; i < startingY + depth || i < Chunk.ChunkHeight; i++)
+            {
+                if (i < 0 || x < 0 || i >= startingY + depth) return;
+                var tile = Main.tile[(int)x, i];
+                tile.HasTile = hasTile;
+                tile.TileType = tileType;
+                tile.BlockType = BlockType.Solid;
+                tile.LiquidType = 0;
+                tile.LiquidAmount = 0;
+                tile.WallType = wallType;
+            }
+        }
 
         public static void OreRunner(int i, int j, int minX, int minY, int maxX, int maxY, double strength, int steps, int type, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int ignoreTileType = -1)
         {

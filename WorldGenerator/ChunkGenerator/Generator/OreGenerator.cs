@@ -48,7 +48,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                 else
                     mineralToGen = 167;
 
-                WorldGenUtils.OreRunner(WorldGen.genRand.Next((int)startingX, (int)(startingX + Chunk.ChunkWidth)), WorldGen.genRand.Next(200, Main.maxTilesY + 200), (int)startingX, 0, (int)(startingX + ChunkMap.ChunkWidth), Main.maxTilesY + 200, WorldGen.genRand.Next(9, 15), WorldGen.genRand.Next(7, 10), mineralToGen);
+                WorldGenUtils.OreRunner(WorldGen.genRand.Next((int)startingX, (int)(startingX + Chunk.ChunkWidth)), WorldGen.genRand.Next(200, Main.maxTilesY - 200), (int)startingX, 0, (int)(startingX + ChunkMap.ChunkWidth), Main.maxTilesY + 200, WorldGen.genRand.Next(9, 15), WorldGen.genRand.Next(7, 10), mineralToGen);
             }
         }
     }
@@ -88,7 +88,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                 else
                     mineralToGen = 167;
 
-                WorldGenUtils.OreRunner(WorldGen.genRand.Next((int)startingX, (int)(startingX + Chunk.ChunkWidth)), WorldGen.genRand.Next(200, Main.maxTilesY + 200), (int)startingX, 0, (int)(startingX + ChunkMap.ChunkWidth), Main.maxTilesY + 200, WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), mineralToGen);
+                WorldGenUtils.OreRunner(WorldGen.genRand.Next((int)startingX, (int)(startingX + Chunk.ChunkWidth)), WorldGen.genRand.Next(200, Main.maxTilesY - 200), (int)startingX, 0, (int)(startingX + ChunkMap.ChunkWidth), Main.maxTilesY + 200, WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), mineralToGen);
             }
             /*
             int startingPositionX = (int)(startingX);
@@ -109,6 +109,22 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator.Generator
                     }
                 }
             }*/
+        }
+    }
+
+    internal class HellstoneOreGenerator : GeneratePass
+    {
+        public HellstoneOreGenerator(uint ChunkId) : base(ChunkId)
+        {
+        }
+
+        public override void Apply(long startingX)
+        {
+            for (int num896 = 0; num896 < (int)((double)(Chunk.ChunkWidth * Main.maxTilesY) * 8E-05); num896++)
+            {
+                var mineralToGen = TileID.Hellstone;
+                WorldGenUtils.OreRunner(WorldGen.genRand.Next((int)startingX, (int)(startingX + Chunk.ChunkWidth)), WorldGen.genRand.Next(Main.maxTilesY - 200, Main.maxTilesY), (int)startingX, 0, (int)(startingX + ChunkMap.ChunkWidth), Main.maxTilesY + 200, WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), mineralToGen);
+            }
         }
     }
 }

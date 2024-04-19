@@ -23,11 +23,6 @@ namespace InfiniteWorldLibrary.World
         private readonly int m_viewRange = 3;
         //private UndergroundChunkGenerator undergroundGenerator;
 
-        /// <summary>
-        /// string = GeneratorName
-        /// Value = ChunkGenerator
-        /// </summary>
-        private readonly Dictionary<string, ChunkGenerator> _chunkGenerators;
 
         /// <summary>
         /// List of Chunks in the World

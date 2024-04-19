@@ -17,16 +17,26 @@ using Terraria.WorldBuilding;
 
 namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
 {
-    public static class ChunkGeneratorV2
+    public abstract class BaseChunkGenerator : IDisposable
     {
         public static ConcurrentQueue<uint> PendingChunkList = new ConcurrentQueue<uint>();
         internal static ConcurrentBag<uint> generatedChunkList = new ConcurrentBag<uint>();
 
         private static Task _watcher;
         private static CancellationTokenSource source = new CancellationTokenSource();
-        private static CancellationToken token => source.Token;
+        private static CancellationToken token => source.Token;
 
-        public static void Create()
+        public abstract ChunkGen GenerateDefaultChunkGen(uint chunkId);
+
+        public void ForceGenerate(uint chunkId)
+        {
+            uint staticChunkId = chunkId;
+            LogManager.GetLogger("Generating").Info(staticChunkId);
+            var generate = GenerateDefaultChunkGen(staticChunkId);
+            generate.GenerateChunk();
+        }
+
+        public void Create()
         {
             _watcher = new Task(() =>
             {
@@ -34,7 +44,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
                 {
                     if (PendingChunkList.TryDequeue(out var chunkId) && !generatedChunkList.Contains(chunkId))
                     {
-                        
+
                         generatedChunkList.Add(chunkId);
                         Task.Run(() =>
                         {
@@ -45,19 +55,19 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
                         });
                     }
                 }
-            }, token,TaskCreationOptions.LongRunning);
+            }, token, TaskCreationOptions.LongRunning);
             _watcher.Start();
         }
 
-        public static void ForceGenerate(uint chunkId)
+        public void Dispose()
         {
-            uint staticChunkId = chunkId;
-            LogManager.GetLogger("Generating").Info(staticChunkId);
-            var generate = GenerateDefaultChunkGen(staticChunkId);
-            generate.GenerateChunk();
+            _watcher.Dispose();
         }
+    }
 
-        internal static ChunkGen GenerateDefaultChunkGen(uint chunkId)
+    public class DefaultChunkGenerator : BaseChunkGenerator
+    {
+        public override ChunkGen GenerateDefaultChunkGen(uint chunkId)
         {
             var chunkGen = new ChunkGen(chunkId);
             // Initial tile clearing
@@ -72,6 +82,7 @@ namespace InfiniteWorldLibrary.WorldGenerator.ChunkGenerator
             // Ore generation
             chunkGen.AddPass("Copper", new CopperTinOreGenerator(chunkId));
             chunkGen.AddPass("Iron", new IronLeadOreGenerator(chunkId));
+            chunkGen.AddPass("Hellstone", new HellstoneOreGenerator(chunkId));
             // Cave generation
             chunkGen.AddPass("PerlinDirtPatch", new DirtPerlinPatchGenerator(chunkId));
             chunkGen.AddPass("PerlinCave", new BasicPerlinCaveWorldGenPass(chunkId));
